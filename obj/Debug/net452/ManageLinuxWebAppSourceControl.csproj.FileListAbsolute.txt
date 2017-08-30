@@ -1,0 +1,4 @@
+C:\Sources\dotnet-samples\app-service-dotnet-configure-deployment-sources-for-web-apps-on-linux\bin\Debug\net452\ManageLinuxWebAppSourceControl.runtimeconfig.json
+C:\Sources\dotnet-samples\app-service-dotnet-configure-deployment-sources-for-web-apps-on-linux\bin\Debug\net452\ManageLinuxWebAppSourceControl.runtimeconfig.dev.json
+C:\Sources\dotnet-samples\app-service-dotnet-configure-deployment-sources-for-web-apps-on-linux\obj\Debug\net452\ManageLinuxWebAppSourceControl.csproj.ManageLinuxWebAppSourceControl.exe.config
+C:\Sources\dotnet-samples\app-service-dotnet-configure-deployment-sources-for-web-apps-on-linux\obj\Debug\net452\ManageLinuxWebAppSourceControl.csproj.CoreCompileInputs.cache
