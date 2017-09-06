@@ -1,2 +1,0 @@
-C:\Sources\dotnet-samples\app-service-dotnet-configure-deployment-sources-for-web-apps-on-linux\bin\Debug\netstandard1.6\ManageLinuxWebAppSourceControl.deps.json
-C:\Sources\dotnet-samples\app-service-dotnet-configure-deployment-sources-for-web-apps-on-linux\obj\Debug\netstandard1.6\ManageLinuxWebAppSourceControl.csproj.CoreCompileInputs.cache
