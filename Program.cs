@@ -60,11 +60,19 @@ namespace ManageLinuxWebAppSourceControl
                 var webSiteCollection = resourceGroup.GetWebSites();
                 var webSiteData = new WebSiteData(region)
                 {
-                    SiteConfig = new Azure.ResourceManager.AppService.Models.SiteConfigProperties()
+                    SiteConfig = new SiteConfigProperties()
                     {
-                        WindowsFxVersion = "PricingTier.StandardS1",
-                        NetFrameworkVersion = "NetFrameworkVersion.V4_6",
-                    }
+                        LinuxFxVersion = "PricingTier.StandardS1",
+                        AppSettings =
+                        {
+                            new AppServiceNameValuePair()
+                            {
+                                Name = "PORT",
+                                Value = "8080",
+                            }
+                        },
+                        AppCommandLine = "/bin/bash -c \"sed -ie 's/appBase=\\\"webapps\\\"/appBase=\\\"\\\\/home\\\\/site\\\\/wwwroot\\\\/webapps\\\"/g' conf/server.xml && catalina.sh run\""
+                    },
                 };
                 var webSite_lro = await webSiteCollection.CreateOrUpdateAsync(Azure.WaitUntil.Completed, app1Name, webSiteData);
                 var webSite = webSite_lro.Value;
@@ -102,15 +110,22 @@ namespace ManageLinuxWebAppSourceControl
                 var plan = webSite.Data.AppServicePlanId;
                 var webSiteData2 = new WebSiteData(region)
                 {
-                    SiteConfig = new Azure.ResourceManager.AppService.Models.SiteConfigProperties()
+                    SiteConfig = new SiteConfigProperties()
                     {
-                        WindowsFxVersion = "PricingTier.StandardS1",
-                        NetFrameworkVersion = "NetFrameworkVersion.V4_6",
+                        AppSettings =
+                        {
+                            new AppServiceNameValuePair()
+                            {
+                                Name = "PORT",
+                                Value = "8080",
+                            }
+                        },
+                        AppCommandLine = "/bin/bash -c \"sed -ie 's/appBase=\\\"webapps\\\"/appBase=\\\"\\\\/home\\\\/site\\\\/wwwroot\\\\/webapps\\\"/g' conf/server.xml && catalina.sh run\""
                     },
                     AppServicePlanId = plan,
                 };
-                var webSite_lro2 = await webSiteCollection.CreateOrUpdateAsync(Azure.WaitUntil.Completed, app2Name, webSiteData);
-                var webSite2 = webSite_lro.Value;
+                var webSite_lro2 = await webSiteCollection.CreateOrUpdateAsync(Azure.WaitUntil.Completed, app2Name, webSiteData2);
+                var webSite2 = webSite_lro2.Value;
 
                 Utilities.Log("Created web app " + webSite2.Data.Name);
                 Utilities.Print(webSite2);
@@ -146,18 +161,34 @@ namespace ManageLinuxWebAppSourceControl
                 // Create a 3rd web app with a public GitHub repo in Azure-Samples
 
                 Utilities.Log("Creating another web app " + app3Name + "...");
+                var publicRepodata = new SiteSourceControlData()
+                {
+                    RepoUri = new Uri("https://github.com/azure-appservice-samples/java-get-started"),
+                    Branch = "master",
+                    //IsManualIntegration = true,
+                    //IsMercurial = false,
+                };
                 var webSiteData3 = new WebSiteData(region)
                 {
-                    SiteConfig = new Azure.ResourceManager.AppService.Models.SiteConfigProperties()
+                    SiteConfig = new SiteConfigProperties()
                     {
-                        WindowsFxVersion = "PricingTier.StandardS1",
-                        NetFrameworkVersion = "NetFrameworkVersion.V4_6",
+                        AppSettings =
+                        {
+                            new AppServiceNameValuePair()
+                            {
+                                Name = "PORT",
+                                Value = "8080",
+                            }
+                        },
+                        AppCommandLine = "/bin/bash -c \"sed -ie 's/appBase=\\\"webapps\\\"/appBase=\\\"\\\\/home\\\\/site\\\\/wwwroot\\\\/webapps\\\"/g' conf/server.xml && catalina.sh run\""
                     },
                     AppServicePlanId = plan,
 
                 };
-                var webSite_lro3 = await webSiteCollection.CreateOrUpdateAsync(Azure.WaitUntil.Completed, app3Name, webSiteData);
-                var webSite3 = webSite_lro.Value;
+                var webSite_lro3 = await webSiteCollection.CreateOrUpdateAsync(Azure.WaitUntil.Completed, app3Name, webSiteData3);
+                var webSite3 = webSite_lro3.Value;
+                var container = webSite3.GetWebSiteSourceControl();
+                var sourceControl = (await container.CreateOrUpdateAsync(Azure.WaitUntil.Completed, publicRepodata)).Value;
 
                 Utilities.Log("Created web app " + webSite3.Data.Name);
                 Utilities.Print(webSite3);
@@ -175,16 +206,23 @@ namespace ManageLinuxWebAppSourceControl
                 Utilities.Log("Creating another web app " + app4Name + "...");
                 var webSiteData4 = new WebSiteData(region)
                 {
-                    SiteConfig = new Azure.ResourceManager.AppService.Models.SiteConfigProperties()
+                    SiteConfig = new SiteConfigProperties()
                     {
-                        WindowsFxVersion = "PricingTier.StandardS1",
-                        NetFrameworkVersion = "NetFrameworkVersion.V4_6",
+                        AppSettings =
+                        {
+                            new AppServiceNameValuePair()
+                            {
+                                Name = "PORT",
+                                Value = "8080",
+                            }
+                        },
+                        AppCommandLine = "/bin/bash -c \"sed -ie 's/appBase=\\\"webapps\\\"/appBase=\\\"\\\\/home\\\\/site\\\\/wwwroot\\\\/webapps\\\"/g' conf/server.xml && catalina.sh run\""
                     },
                     AppServicePlanId = plan,
 
                 };
-                var webSite_lro4 = await webSiteCollection.CreateOrUpdateAsync(Azure.WaitUntil.Completed, app4Name, webSiteData);
-                var webSite4 = webSite_lro.Value;
+                var webSite_lro4 = await webSiteCollection.CreateOrUpdateAsync(Azure.WaitUntil.Completed, app4Name, webSiteData4);
+                var webSite4 = webSite_lro4.Value;
 
                 Utilities.Log("Created web app " + webSite4.Data.Name);
                 Utilities.Print(webSite4);
